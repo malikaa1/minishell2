@@ -1,0 +1,18 @@
+ls "-l"
+ls " -l"
+echo " 'hello" 'ls'  "'-l'"
+echo " 'hello" 'ls'  '"-l"'
+<< hi >hello
+<< hi cd
+echo yesmine >yas | cd ( ici normalement le cd ne marche pas)
+$?
+$?
+(0 si la commande est bonne , 127 si $? 2 fois ou bien c pas une commande, 130 aprés un ctrl_c, 1 si on esaye d'ouvrir un fichier qui n'existe pas)
+ls | wc
+ls >hello
+echo hi >>hello
+pwd
+export yy=yes
+echo "$yy"
+env 
+unset yy
