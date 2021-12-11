@@ -89,7 +89,7 @@ int			ft_cd(char **dir);
 int			ft_echo(char **arg);
 int			ft_env(t_env *env);
 int			ft_infile(t_command com, int dupIt);
-void		init_env(t_env **env_list, char **env);
+void		init_env(t_shellinfo *shell, char **env);
 int			ft_outfile(t_command com, int dupIt);
 int			ft_outfile_append(t_command com, int dupIt);
 void		ft_read_from_shell(t_command com, int dupIt);
@@ -128,6 +128,7 @@ void		ft_exit(t_shellinfo shell, int stat);
 void		free_env_list(t_env *env_list);
 void		ft_free_old_pipe(t_shellinfo shell);
 void		tab_init(char **str, int size);
+void init_com_struct(t_shellinfo *shell, char **commands);
 int			space_calcul(char *str);
 
 

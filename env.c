@@ -31,7 +31,7 @@ void add_env(t_env **env, char *str)
 
 	tmp = *env;
 	if (!(new = malloc(sizeof(t_env))))
-		return ;
+		return;
 	if (*env == NULL)
 	{
 		*env = new;
@@ -52,33 +52,33 @@ void add_env(t_env **env, char *str)
 	}
 }
 
-void init_env(t_env **env_list, char **env)
+void init_env(t_shellinfo *shell, char **env)
 {
 	t_env *tmp;
-
+	
 	tmp = NULL;
-	if (*env_list == NULL)
+	if (shell->env == NULL)
 	{
 		while (*env)
 		{
 			add_env(&tmp, *env);
 			env++;
 		}
-		*env_list = tmp;
+		shell->env = tmp;
 	}
 }
 
 char *get_value(char *s)
 {
-    int i;
+	int i;
 	int count;
 	char *tmp;
-    
-    i = 0;
+
+	i = 0;
 	count = 0;
 	if (s != NULL)
 	{
-        while (s[i])
+		while (s[i])
 		{
 			count++;
 			if (s[i] == '=')
@@ -105,5 +105,5 @@ char *get_name_env(char *s)
 			return (ft_substr(s, 0, i));
 		i++;
 	}
-    return (ft_strdup(s));
+	return (ft_strdup(s));
 }

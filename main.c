@@ -12,12 +12,12 @@
 
 #include "include/minishell.h"
 
-int	executer(t_command com_struct, t_shellinfo shell, int i, char **commands)
+int executer(t_command com_struct, t_shellinfo shell, int i, char **commands)
 {
 	int ret;
 
 	ret = 0;
-	if(is_a_real_builtin(com_struct.com) == 0)
+	if (is_a_real_builtin(com_struct.com) == 0)
 	{
 		shell.execute = 1;
 		pipe_cmd(com_struct, shell);
@@ -35,7 +35,7 @@ int	executer(t_command com_struct, t_shellinfo shell, int i, char **commands)
 	return (ret);
 }
 
-char	*read_check_and_trim(t_shellinfo shell)
+char *read_check_and_trim(t_shellinfo shell)
 {
 	char *str;
 	char *tmp;
@@ -45,11 +45,11 @@ char	*read_check_and_trim(t_shellinfo shell)
 	if (str == NULL)
 	{
 		printf("\n");
-		ft_exit(shell, 0);// ctrl_d
+		ft_exit(shell, 0); // ctrl_d
 	}
 	tmp = ft_strtrim(str, " \t\r\f\v\n");
 	free(str);
-	if (ft_strcompare(tmp, "exit") == 1) 
+	if (ft_strcompare(tmp, "exit") == 1)
 	{
 		free(tmp);
 		ft_exit(shell, 0);
@@ -63,7 +63,7 @@ char	*read_check_and_trim(t_shellinfo shell)
 	return (tmp);
 }
 
-void	old_pipe_set(t_shellinfo *shell)
+void old_pipe_set(t_shellinfo *shell)
 {
 	shell->old_pipe[0] = malloc(sizeof(int));
 	if (shell->old_pipe[0] == NULL)
@@ -74,40 +74,44 @@ void	old_pipe_set(t_shellinfo *shell)
 	shell->previous = 0;
 }
 
-void	minishell_loop(char **env)
+void init_com_struct(t_shellinfo *shell, char **commands)
+{
+	t_command com_struct;
+	int i;
+
+	i = 0;
+	while (commands && commands[i] != NULL)
+	{
+		shell->coming = (commands[i + 1] == NULL) ? 0 : 1;
+		com_struct = get_cmd(commands[i]);
+		if (executer(com_struct, *shell, i, commands) == -1)
+		{
+			ft_free_cmd(&com_struct);
+			break;
+		}
+		i++;
+		shell->previous = 1;
+		ft_free_cmd(&com_struct);
+		if (g_shell_status != 0)
+			break;
+	}
+}
+void minishell_loop(char **env)
 {
 	char **commands;
 	t_shellinfo shell;
 	char *tmp;
-	t_command com_struct;
-	int i;
 
-	shell.env = NULL;
-	init_env(&shell.env, env);
+	init_env(&shell, env);
 	while (1)
 	{
-		i = 0;
 		tmp = read_check_and_trim(shell);
 		if (tmp == NULL)
-			continue ;
+			continue;
 		commands = ft_mini_split(tmp, '|');
 		free(tmp);
 		old_pipe_set(&shell);
-		while (commands && commands[i] != NULL)
-		{
-			shell.coming = (commands[i + 1] == NULL) ? 0 : 1;
-			com_struct = get_cmd(commands[i]);
-			if (executer(com_struct, shell, i, commands) == -1)
-			{
-				ft_free_cmd(&com_struct);
-				break;
-			}
-			i++;
-			shell.previous = 1;
-			ft_free_cmd(&com_struct);
-			if (g_shell_status != 0)
-				break ;
-		}
+		init_com_struct(&shell, commands);
 		ft_free_tab(commands);
 		ft_free_old_pipe(shell);
 	}
