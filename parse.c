@@ -14,7 +14,7 @@
 
 char *getenv_value_from_list(t_shellinfo shell, char *env)
 {
-	while(shell.env && shell.env->var)
+	while (shell.env && shell.env->var)
 	{
 		if (ft_strcompare(shell.env->name, env) == 1)
 			return (shell.env->value);
@@ -50,7 +50,7 @@ char *find_cmd_path(char *cmd)
 		if (access(tmp, F_OK) == 0)
 		{
 			ft_free_tab(path_tab);
-			return(tmp);
+			return (tmp);
 		}
 		free(tmp);
 		i++;
@@ -58,40 +58,44 @@ char *find_cmd_path(char *cmd)
 	ft_free_tab(path_tab);
 	return (NULL);
 }
-
-int quotes_enum(char *str)
+void sum_quotes(int *quotes_num, int *double_quotes_num, char *str)
 {
 	int i;
-	int quotes_num;
-	int double_quotes_num;
 
 	i = 0;
-	double_quotes_num = 0;
-	quotes_num = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '\"' && (i == 0 || str[i - 1] != '\\'))
 		{
-			double_quotes_num++;
+			*double_quotes_num = *double_quotes_num + 1;
 			i++;
 			while (str[i] != '\0' && (str[i] != '\"' || str[i - 1] == '\\'))
 				i++;
-			double_quotes_num++;
+			*double_quotes_num = *double_quotes_num + 1;
 		}
 		if (str[i] == '\'')
 		{
-			quotes_num++;
+			*quotes_num = *quotes_num + 1;
 			i++;
 			while (str[i] != '\0' && str[i] != '\'')
 				i++;
-			quotes_num++;
+			*quotes_num = *quotes_num + 1;
 		}
 		i++;
 	}
+}
+int quotes_enum(char *str)
+{
+	int quotes_num;
+	int double_quotes_num;
+
+	double_quotes_num = 0;
+	quotes_num = 0;
+	sum_quotes(&quotes_num, &double_quotes_num, str);
 	return (quotes_num + double_quotes_num);
 }
 
-void	ft_remove_char(char *str, int pos)
+void ft_remove_char(char *str, int pos)
 {
 	while (str[pos] != '\0')
 	{
@@ -100,7 +104,7 @@ void	ft_remove_char(char *str, int pos)
 	}
 }
 
-void	remove_quotes(char *str, int *pos_tab)
+void remove_quotes(char *str, int *pos_tab)
 {
 	int i;
 
@@ -112,12 +116,11 @@ void	remove_quotes(char *str, int *pos_tab)
 	}
 }
 
-void	ft_delete_quotes(char *com)
+void ft_delete_quotes(char *com)
 {
 	int i;
 	int *pos_tab;
 	int j;
-
 
 	i = 0;
 	j = 0;
@@ -151,7 +154,7 @@ void	ft_delete_quotes(char *com)
 	remove_quotes(com, pos_tab);
 	free(pos_tab);
 }
-int		is_it_between_simple_quotes(char *str, int pos)
+int is_it_between_simple_quotes(char *str, int pos)
 {
 
 	int i;
@@ -168,10 +171,8 @@ int		is_it_between_simple_quotes(char *str, int pos)
 	if (result % 2 != 0)
 		return (1);
 	return (0);
-
-
 }
-int		is_it_between_quotes(char *str, int pos)
+int is_it_between_quotes(char *str, int pos)
 {
 	int i;
 	int result;
@@ -197,7 +198,7 @@ int		is_it_between_quotes(char *str, int pos)
 	return (0);
 }
 
-int	caculate_char_to_add(char **str, char *com)
+int caculate_char_to_add(char **str, char *com)
 {
 	int i;
 	int char_to_add;
@@ -223,7 +224,6 @@ void tab_init(char **str, int size)
 		str[i] = NULL;
 		i++;
 	}
-	
 }
 
 void getenv_doll(int *char_to_extract, char *com, t_shellinfo shell, char **str)

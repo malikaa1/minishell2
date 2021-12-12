@@ -16,3 +16,4 @@ export yy=yes
 echo "$yy"
 env 
 unset yy
+echo \"lol
