@@ -91,7 +91,7 @@ int quotes_enum(char *str)
 	return (quotes_num + double_quotes_num);
 }
 
-void	ft_remove_char(char *str,int pos)
+void	ft_remove_char(char *str, int pos)
 {
 	while (str[pos] != '\0')
 	{
@@ -141,7 +141,7 @@ void	ft_delete_quotes(char *com)
 			i++;
 			while (com[i] != '\0' && com[i] != '\'')
 				i++;
-			
+
 			pos_tab[j] = i;
 			j++;
 		}
@@ -168,7 +168,7 @@ int		is_it_between_simple_quotes(char *str, int pos)
 	if (result % 2 != 0)
 		return (1);
 	return (0);
-	
+
 
 }
 int		is_it_between_quotes(char *str, int pos)
@@ -223,29 +223,18 @@ void tab_init(char **str, int size)
 		str[i] = NULL;
 		i++;
 	}
-
+	
 }
 
-char *substitute_env_var(t_shellinfo shell, char *com)
+void getenv_doll(int *char_to_extract, char *com, t_shellinfo shell, char **str)
 {
+	char *env;
+	int j;
 	unsigned int i;
 	int tmp;
-	char *env;
-	char **str;
-	char *doll;
-	int char_to_extract;
-	int char_to_add;
-	int j;
 
-	i = 0;
 	j = 0;
-	char_to_extract = 0;
-	char_to_add =0;
-
-	str = malloc(sizeof(char *) * (char_numb(com, '$', 0, 0) + 1));
-	if (str == NULL)
-		return NULL;
-	tab_init(str, char_numb(com, '$', 0, 0) + 1 );
+	i = 0;
 	while (i < ft_strlen(com))
 	{
 		if (com[i] == '$')
@@ -255,15 +244,31 @@ char *substitute_env_var(t_shellinfo shell, char *com)
 			while (ft_isalnum(com[i]) == 1)
 				i++;
 			env = ft_substr(com, tmp, i - tmp);
-			char_to_extract = char_to_extract + ft_strlen(env) + 1;
+			*char_to_extract = *char_to_extract + ft_strlen(env) + 1;
 			str[j] = getenv_value_from_list(shell, env);
 			free(env);
 			j++;
 		}
 		i++;
 	}
-	char_to_add =  caculate_char_to_add(str, com);
-	doll= dollar_between_quotes(str, com, char_to_extract, char_to_add);
+}
+
+char *substitute_env_var(t_shellinfo shell, char *com)
+{
+	char **str;
+	char *doll;
+	int char_to_extract;
+	int char_to_add;
+
+	char_to_extract = 0;
+	char_to_add = 0;
+	str = malloc(sizeof(char *) * (char_numb(com, '$', 0, 0) + 1));
+	if (str == NULL)
+		return NULL;
+	tab_init(str, char_numb(com, '$', 0, 0) + 1);
+	getenv_doll(&char_to_extract, com, shell, str);
+	char_to_add = caculate_char_to_add(str, com);
+	doll = dollar_between_quotes(str, com, char_to_extract, char_to_add);
 	ft_free_tab(str);
 	return (doll);
 }
