@@ -58,6 +58,7 @@ char *find_cmd_path(char *cmd)
 	ft_free_tab(path_tab);
 	return (NULL);
 }
+
 void sum_quotes(int *quotes_num, int *double_quotes_num, char *str)
 {
 	int i;
@@ -116,6 +117,28 @@ void remove_quotes(char *str, int *pos_tab)
 	}
 }
 
+void check_double_quotes(char *com, int *pos_tab, int *i, int *j)
+{
+	pos_tab[*j] = *i;
+	*j += 1;
+	*i += 1;
+	while (com[*i] != '\0' && (com[*i] != '\"' || com[*i - 1] == '\\'))
+		*i += 1;
+	pos_tab[*j] = *i;
+	*j += 1;
+}
+
+void check_single_quotes(char *com, int *pos_tab, int *i, int *j)
+{
+	pos_tab[*j] = *i;
+	*j += 1;
+	*i += 1;
+	while (com[*i] != '\0' && com[*i] != '\'')
+		*i += 1;
+	pos_tab[*j] = *i;
+	*j += 1;
+}
+
 void ft_delete_quotes(char *com)
 {
 	int i;
@@ -129,24 +152,11 @@ void ft_delete_quotes(char *com)
 	{
 		if (com[i] == '\"' && (i == 0 || com[i - 1] != '\\'))
 		{
-			pos_tab[j] = i;
-			j++;
-			i++;
-			while (com[i] != '\0' && (com[i] != '\"' || com[i - 1] == '\\'))
-				i++;
-			pos_tab[j] = i;
-			j++;
+			check_double_quotes(com, pos_tab, &i, &j);
 		}
 		if (com[i] == '\'')
 		{
-			pos_tab[j] = i;
-			j++;
-			i++;
-			while (com[i] != '\0' && com[i] != '\'')
-				i++;
-
-			pos_tab[j] = i;
-			j++;
+			check_single_quotes(com, pos_tab, &i, &j);
 		}
 		i++;
 	}
@@ -154,6 +164,7 @@ void ft_delete_quotes(char *com)
 	remove_quotes(com, pos_tab);
 	free(pos_tab);
 }
+
 int is_it_between_simple_quotes(char *str, int pos)
 {
 
@@ -172,6 +183,7 @@ int is_it_between_simple_quotes(char *str, int pos)
 		return (1);
 	return (0);
 }
+
 int is_it_between_quotes(char *str, int pos)
 {
 	int i;
