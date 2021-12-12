@@ -12,6 +12,35 @@
 
 #include "minishell.h"
 
+int check_quotes(char *str, int *index, int *single_quotes, int *double_quotes)
+{
+	while (str != NULL && str[*index] != '\0')
+	{
+		if (str[*index] == '\"' && (*index == 0 || str[*index - 1] != '\\'))
+		{
+			*double_quotes += 1;
+			*index += 1;
+			while (str[*index] != '\0' && (str[*index] != '\"' || str[*index - 1] == '\\'))
+				*index += 1;
+			if (str[*index] == '\0')
+				return (1);
+			*double_quotes += 1;
+		}
+		if (str[*index] == '\'')
+		{
+			*single_quotes += 1;
+			*index += 1;
+			while (str[*index] != '\0' && str[*index] != '\'')
+				*index += 1;
+			if (str[*index] == '\0')
+				return (1);
+			*single_quotes += 1;
+		}
+		*index += 1;
+	}
+	return (0);
+}
+
 int check_inclosed_quotes(char *str)
 {
 	int i;
@@ -21,36 +50,14 @@ int check_inclosed_quotes(char *str)
 	i = 0;
 	double_quotes_num = 0;
 	quotes_num = 0;
-	while (str != NULL && str[i] != '\0')
-	{
-		if (str[i] == '\"' && (i == 0 || str[i - 1] != '\\'))
-		{
-			double_quotes_num++;
-			i++;
-			while (str[i] != '\0' && (str[i] != '\"' || str[i - 1] == '\\'))
-				i++;
-			if (str[i] == '\0')
-				return (1);
-			double_quotes_num++;
-		}
-		if (str[i] == '\'' )
-		{
-			quotes_num++;
-			i++;
-			while (str[i] != '\0' && str[i] != '\'')
-				i++;
-			if (str[i] == '\0')
-				return (1);
-			quotes_num++;
-		}
-		i++;
-	}
+	if (check_quotes(str, &i, &quotes_num, &double_quotes_num) == 1)
+		return (1);
 	if (quotes_num % 2 != 0 || double_quotes_num % 2 != 0)
 		return (1);
 	return (0);
 }
 
-int	check_syntax_errors(char *str)
+int check_syntax_errors(char *str)
 {
 	int i;
 
@@ -67,26 +74,26 @@ int	check_syntax_errors(char *str)
 int is_builtin(char *str)
 {
 	if (ft_strcompare(str, "cd") == 1)
-		return(1);
+		return (1);
 	if (ft_strcompare(str, "pwd") == 1)
-		return(1);
+		return (1);
 	if (ft_strcompare(str, "export") == 1)
-		return(1);
+		return (1);
 	if (ft_strcompare(str, "env") == 1)
-		return(1);
+		return (1);
 	if (ft_strcompare(str, "echo") == 1)
-		return(1);
+		return (1);
 	if (ft_strcompare(str, "unset") == 1)
-		return(1);
+		return (1);
 	return (0);
 }
 
 int is_a_real_builtin(char *str)
 {
 	if (ft_strcompare(str, "cd") == 1)
-		return(1);
+		return (1);
 	if (ft_strcompare(str, "export") == 1)
-		return(1);
+		return (1);
 	if (ft_strcompare(str, "unset") == 1)
 		return (1);
 	return (0);
@@ -94,9 +101,7 @@ int is_a_real_builtin(char *str)
 
 int ft_strcompare(char *str1, char *str2)
 {
-	if (ft_strncmp(str1, str2, ft_strlen(str1)) == 0
-		&& ft_strlen(str1) == ft_strlen(str2))
+	if (ft_strncmp(str1, str2, ft_strlen(str1)) == 0 && ft_strlen(str1) == ft_strlen(str2))
 		return (1);
 	return (0);
 }
-
