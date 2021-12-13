@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	ft_envsize(t_env *env)
+int ft_envsize(t_env *env)
 {
 	int i;
 
@@ -28,7 +28,7 @@ int	ft_envsize(t_env *env)
 char **convert_list_to_tab(t_env *env)
 {
 	char **tab;
-	int	 tablen;
+	int tablen;
 	int i;
 
 	i = 0;
@@ -44,47 +44,61 @@ char **convert_list_to_tab(t_env *env)
 	return (tab);
 }
 
+void is_double_quotes(t_command com, int *i, int *j, char **tab)
+{
+	int tmp;
+
+	tmp = *i;
+	*i += 1;
+	while (com.args[*i] != '\0' && (com.args[*i] != '\"' || com.args[*i - 1] == '\\'))
+		*i += 1;
+	tab[*j] = ft_substr(com.args, tmp, *i - tmp + 1);
+	*j += 1;
+	*i += 1;
+}
+
+void is_single_quotes(t_command com, int *i, int *j, char **tab)
+{
+	int tmp;
+
+	tmp = *i;
+	*i += 1;
+	while (com.args[*i] != '\0' && com.args[*i] != '\'')
+		*i += 1;
+	tab[*j] = ft_substr(com.args, tmp, *i - tmp + 1);
+	*j += 1;
+	*i += 1;
+}
+
+void is_char(t_command com, int *i, int *j, char **tab)
+{
+	int tmp;
+
+	tmp = *i;
+	while ((ft_isspace(com.args[*i]) == 0 && com.args[*i] != '\0') || is_it_between_quotes(com.args, *i) == 1)
+		*i += 1;
+	tab[*j] = ft_substr(com.args, tmp, *i - tmp);
+	*j += 1;
+}
+
 char **create_tab(t_command com, t_shellinfo shell)
 {
 	char **tab;
 	int i;
 	int j;
-	int tmp;
 
 	i = 0;
 	j = 0;
-
 	tab = malloc(sizeof(char *) * (space_calcul(com.args) + 2));
 	while (com.args[i] != '\0')
 	{
-		if (com.args[i] == '\"' && (i == 0 || com.args[i - 1] != '\\')) //si double cote
-		{
-			tmp = i;
-			i++;
-			while (com.args[i] != '\0' && (com.args[i] != '\"' || com.args[i - 1] == '\\'))
-				i++;
-			tab[j] = ft_substr(com.args, tmp, i - tmp + 1);
-			j++;
-			i++;
-		}
+		if (com.args[i] == '\"' && (i == 0 || com.args[i - 1] != '\\')) // si double cote
+			is_double_quotes(com, &i, &j, tab);
 		else if (com.args[i] == '\'') // si cote
-		{
-			tmp = i;
-			i++;
-			while (com.args[i] != '\0' && com.args[i] != '\'')
-				i++;
-			tab[j] = ft_substr(com.args, tmp, i - tmp + 1);
-			j++;
-			i++;
-		}
-		else if (ft_isspace(com.args[i]) == 0) //si caractere
-		{
-			tmp = i;
-			while ((ft_isspace(com.args[i]) == 0 && com.args[i] != '\0') || is_it_between_quotes(com.args, i) == 1)
-				i++;
-			tab[j] = ft_substr(com.args, tmp, i - tmp);
-			j++;
-		}
+			is_single_quotes(com, &i, &j, tab);
+	
+		else if (ft_isspace(com.args[i]) == 0) // si caractere
+			is_char(com, &i, &j, tab);
 		else
 			i++;
 	}
