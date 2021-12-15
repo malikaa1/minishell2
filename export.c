@@ -6,7 +6,7 @@
 /*   By: mrahmani <mrahmani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 10:21:10 by mrahmani          #+#    #+#             */
-/*   Updated: 2021/12/15 20:55:16 by mrahmani         ###   ########.fr       */
+/*   Updated: 2021/12/15 22:21:13 by mrahmani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int ft_export(t_env *env, char **arg)
             if (exists(arg[i], env, &new_env) == 0)
                 add_env(&env,arg[i]);
             else if (exists(arg[i], env, &env_to_update) == 1)
-                env_to_update->var = arg[i];
+                env_to_update->var = ft_strdup(arg[i]);
             i++;
         }
         else
