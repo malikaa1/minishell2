@@ -35,34 +35,6 @@ int executer(t_command com_struct, t_shellinfo shell, int i, char **commands)
 	return (ret);
 }
 
-char *read_check_and_trim(t_shellinfo shell)
-{
-	char *str;
-	char *tmp;
-
-	str = readline("minishell->");
-	add_history(str);
-	if (str == NULL)
-	{
-		printf("\n");
-		ft_exit(shell, 0); // ctrl_d
-	}
-	tmp = ft_strtrim(str, " \t\r\f\v\n");
-	free(str);
-	if (ft_strcompare(tmp, "exit") == 1)
-	{
-		free(tmp);
-		ft_exit(shell, 0);
-	}
-	if (check_syntax_errors(tmp) == 1)
-	{
-		printf("error : syntax_error\n");
-		free(tmp);
-		tmp = NULL;
-	}
-	return (tmp);
-}
-
 void old_pipe_set(t_shellinfo *shell)
 {
 	shell->old_pipe[0] = malloc(sizeof(int));

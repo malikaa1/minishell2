@@ -71,37 +71,30 @@ int check_syntax_errors(char *str)
 	return (0);
 }
 
-int is_builtin(char *str)
+char *read_check_and_trim(t_shellinfo shell)
 {
-	if (ft_strcompare(str, "cd") == 1)
-		return (1);
-	if (ft_strcompare(str, "pwd") == 1)
-		return (1);
-	if (ft_strcompare(str, "export") == 1)
-		return (1);
-	if (ft_strcompare(str, "env") == 1)
-		return (1);
-	if (ft_strcompare(str, "echo") == 1)
-		return (1);
-	if (ft_strcompare(str, "unset") == 1)
-		return (1);
-	return (0);
-}
+	char *str;
+	char *tmp;
 
-int is_a_real_builtin(char *str)
-{
-	if (ft_strcompare(str, "cd") == 1)
-		return (1);
-	if (ft_strcompare(str, "export") == 1)
-		return (1);
-	if (ft_strcompare(str, "unset") == 1)
-		return (1);
-	return (0);
-}
-
-int ft_strcompare(char *str1, char *str2)
-{
-	if (ft_strncmp(str1, str2, ft_strlen(str1)) == 0 && ft_strlen(str1) == ft_strlen(str2))
-		return (1);
-	return (0);
+	str = readline("minishell->");
+	add_history(str);
+	if (str == NULL)
+	{
+		printf("\n");
+		ft_exit(shell, 0); // ctrl_d
+	}
+	tmp = ft_strtrim(str, " \t\r\f\v\n");
+	free(str);
+	if (ft_strcompare(tmp, "exit") == 1)
+	{
+		free(tmp);
+		ft_exit(shell, 0);
+	}
+	if (check_syntax_errors(tmp) == 1)
+	{
+		printf("error : syntax_error\n");
+		free(tmp);
+		tmp = NULL;
+	}
+	return (tmp);
 }
