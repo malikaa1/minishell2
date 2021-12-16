@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybesbes <ybesbes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mrahmani <mrahmani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:40:43 by ybesbes           #+#    #+#             */
-/*   Updated: 2021/09/27 16:40:45 by ybesbes          ###   ########.fr       */
+/*   Updated: 2021/12/16 21:01:00 by mrahmani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+char *ft_get_pwd(void)
+{
+	char *str;
+	char buf[1000];
+
+	str = getcwd(buf, 1000);
+	return (str);
+}
 
 int ft_pwd(void)
 {

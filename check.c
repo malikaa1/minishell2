@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybesbes <ybesbes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mrahmani <mrahmani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 15:33:55 by ybesbes           #+#    #+#             */
-/*   Updated: 2021/09/27 15:33:59 by ybesbes          ###   ########.fr       */
+/*   Updated: 2021/12/16 15:54:52 by mrahmani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ char *read_check_and_trim(t_shellinfo shell)
 	free(str);
 	if (ft_strcompare(tmp, "exit") == 1)
 	{
+		printf("exit\n");
 		free(tmp);
 		ft_exit(shell, 0);
 	}

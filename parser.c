@@ -6,7 +6,7 @@
 /*   By: mrahmani <mrahmani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 13:20:37 by ybesbes           #+#    #+#             */
-/*   Updated: 2021/12/15 20:09:50 by mrahmani         ###   ########.fr       */
+/*   Updated: 2021/12/16 21:29:43 by mrahmani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,44 @@ char **get_paths()
 	path_tab = ft_split(path, ':');
 	return (path_tab);
 }
+int is_absolute_path(char *cmd)
+{
+	if (cmd == NULL)
+		return (-1);
+	if (cmd[0] == '/')
+	{
+		return (1);
+	}
+	return (0);
+}
+
+int is_relative_path(char *cmd)
+{
+	if (cmd == NULL)
+		return (-1);
+	if ((cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/') || (cmd[0] == '.' && cmd[1] == '/'))
+	{
+		return (1);
+	}
+	return (0);
+}
+
+char *handle_relative_absolute_path(char *cmd)
+{
+	char *tmp;
+	char *tmp2;
+
+	if (is_absolute_path(cmd))
+		return (ft_strdup(cmd));
+	if (is_relative_path(cmd))
+	{
+		tmp = ft_strjoin("/", cmd);
+		tmp2 = ft_strjoin(ft_get_pwd(), tmp);
+		free(tmp);
+		return (tmp2);
+	}
+	return (NULL);
+}
 
 char *find_cmd_path(char *cmd)
 {
@@ -41,6 +79,9 @@ char *find_cmd_path(char *cmd)
 	char *tmp2;
 
 	i = 0;
+	tmp = handle_relative_absolute_path(cmd);
+	if (tmp != NULL)
+		return (tmp);
 	path_tab = get_paths();
 	while (path_tab[i] != NULL)
 	{
@@ -58,7 +99,6 @@ char *find_cmd_path(char *cmd)
 	ft_free_tab(path_tab);
 	return (NULL);
 }
-
 
 void ft_remove_char(char *str, int pos)
 {
