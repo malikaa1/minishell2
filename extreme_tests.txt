@@ -16,6 +16,10 @@ export yy=yes
 echo "$yy"
 env 
 unset yy
+
+
+****************new prob haha*************
+
 echo \"lol
 echo toto | grep o
 exit " "
