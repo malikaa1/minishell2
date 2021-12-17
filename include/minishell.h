@@ -6,7 +6,7 @@
 /*   By: mrahmani <mrahmani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 10:48:04 by ybesbes           #+#    #+#             */
-/*   Updated: 2021/12/16 21:00:56 by mrahmani         ###   ########.fr       */
+/*   Updated: 2021/12/17 15:07:30 by mrahmani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int			char_numb(char *str, char c, int two, int skip_double_q);
 int			check_syntax_errors(char *str);
 char		**read_from_input(char *str);
 void		pipe_cmd(t_command com, t_shellinfo shell);
+void exit_minishell(char **arg, t_shellinfo shell);
 int			ft_pwd(void);
 int			is_builtin(char *str);
 int			is_a_real_builtin(char *str);

@@ -6,7 +6,7 @@
 /*   By: mrahmani <mrahmani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 10:09:57 by ybesbes           #+#    #+#             */
-/*   Updated: 2021/12/15 20:12:35 by mrahmani         ###   ########.fr       */
+/*   Updated: 2021/12/17 15:07:01 by mrahmani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int execute_cmd(t_command com, t_shellinfo shell)
 	ret = 0;
 	ret = check_for_files(com);
 	arg = create_tab(com, shell);
+	if (ft_strcompare(arg[0], "exit") == 1)
+		exit_minishell(arg, shell);
 	if (ft_strcompare(arg[0], "pwd") == 1)
 		ret = ft_pwd();
 	else if (ft_strcompare(arg[0], "cd") == 1)
