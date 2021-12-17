@@ -55,13 +55,15 @@ void case_of_0_cpid(t_command com, t_shellinfo shell, int new_pipe[])
     exit(EXIT_SUCCESS);
 }
 
-void case_of_positive_cpid(t_shellinfo shell, int new_pipe[])
+	
+void case_of_positive_cpid(pid_t cpid, t_shellinfo shell, int new_pipe[])
 {
     if (shell.previous) // previous command
     {
         close(*shell.old_pipe[0]);
         close(*shell.old_pipe[1]);
     }
+	waitpid(cpid, &g_shell_status, 0);
     if (shell.coming) // comming command
     {
         *shell.old_pipe[0] = new_pipe[0];
@@ -87,7 +89,7 @@ int find_and_execute(t_shellinfo shell, char **arg)
     char **tab;
 
 	ret = 0;
-    full_cmd = find_cmd_path(arg[0]);
+    full_cmd = find_cmd_path(shell, arg[0]);
     if (full_cmd != NULL)
     {
         arg[0] = full_cmd;

@@ -164,10 +164,10 @@ void ft_skip_quotes(char *str, int *i, int skip_double_q)
 			;
 		}
 	}
-	if (str[*i] == '\'')
+	if (str[*i] == '\'' && (*i == 0 || str[*i - 1] != '\\'))
 	{
 		*i = *i + 1;
-		while (str[*i] != '\'' && str[*i] != '\0')
+		while ((str[*i] != '\'' || str[*i - 1] == '\\') && str[*i] != '\0')
 			*i = *i + 1;
 	}
 }

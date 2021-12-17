@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "include/minishell.h"
 
 void is_double_quotes(t_command com, int *i, int *j, char **tab)
 {

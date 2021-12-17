@@ -27,11 +27,11 @@ void sum_quotes(int *quotes_num, int *double_quotes_num, char *str)
                 i++;
             *double_quotes_num = *double_quotes_num + 1;
         }
-        if (str[i] == '\'')
+        if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\'))
         {
             *quotes_num = *quotes_num + 1;
             i++;
-            while (str[i] != '\0' && str[i] != '\'')
+            while (str[i] != '\0' && (str[i] != '\'' || str[i - 1] == '\\'))
                 i++;
             *quotes_num = *quotes_num + 1;
         }
@@ -93,5 +93,47 @@ void ft_delete_quotes(char *com)
     }
     pos_tab[j] = '\0';
     remove_quotes(com, pos_tab);
+    ft_delete_backslash(com);
     free(pos_tab);
+}
+
+void ft_delete_backslash(char *com)
+{
+    int i;
+    int *pos;
+    int j;
+    int back_slash_nb;
+
+    i = 0;
+    j = 0;
+    back_slash_nb = 0;
+    while (com[i] != '\0')
+    {
+        if (com[i] == '\\' && com[i + 1] != '\0' && (com[i + 1] == '\'' || com[i + 1] == '\"' ))
+            back_slash_nb++;
+        i++;
+    }
+    pos = malloc(sizeof(int) * (back_slash_nb + 1));
+    if (pos != NULL)
+    {
+        i = 0;
+        while (com[i] != '\0')
+        {
+            if (com[i] == '\\' && com[i + 1] != '\0' && (com[i + 1] == '\'' || com[i + 1] == '\"' ))
+            {
+                pos[j] = i;
+                j++;
+            }
+            i++;
+        }
+        pos[j] = '\0';
+
+    	i = back_slash_nb - 1;
+	    while (i >= 0)
+	    {
+		    ft_remove_char(com, pos[i]);
+		    i--;
+	    }
+        free(pos);
+    }
 }

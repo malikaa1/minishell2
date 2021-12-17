@@ -82,11 +82,10 @@ void pipe_cmd(t_command com, t_shellinfo shell)
 	if (cpid == 0) // child
 		case_of_0_cpid(com, shell, new_pipe);
 	else if (cpid > 0) // parent
-		case_of_positive_cpid(shell, new_pipe);
+		case_of_positive_cpid(cpid, shell, new_pipe);
 	else
 	{
 		perror("creating fork failed");
 		g_shell_status = -1;
 	}
-	waitpid(cpid, &g_shell_status, 0);
 }
