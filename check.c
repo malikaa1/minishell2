@@ -6,7 +6,7 @@
 /*   By: mrahmani <mrahmani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 15:33:55 by ybesbes           #+#    #+#             */
-/*   Updated: 2021/12/16 15:54:52 by mrahmani         ###   ########.fr       */
+/*   Updated: 2021/12/17 13:17:26 by mrahmani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,6 @@ char *read_check_and_trim(t_shellinfo shell)
 	}
 	tmp = ft_strtrim(str, " \t\r\f\v\n");
 	free(str);
-	if (ft_strcompare(tmp, "exit") == 1)
-	{
-		printf("exit\n");
-		free(tmp);
-		ft_exit(shell, 0);
-	}
 	if (check_syntax_errors(tmp) == 1)
 	{
 		printf("error : syntax_error\n");
